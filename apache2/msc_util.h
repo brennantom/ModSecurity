@@ -151,4 +151,7 @@ unsigned char DSOLOCAL is_netmask_v4(char *ip_strv4);
 unsigned char DSOLOCAL is_netmask_v6(char *ip_strv6);
 
 int DSOLOCAL msc_headers_to_buffer(const apr_array_header_t *arr, char *buffer, int max_length);
+
+unsigned char DSOLOCAL *msc_c2x(unsigned what, unsigned char *where);
+
 #endif
