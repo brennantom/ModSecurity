@@ -704,7 +704,9 @@ void sec_audit_logger(modsec_rec *msr) {
                 telts = (const apr_table_entry_t*)tarr->elts;
                 for(i = 0; i < tarr->nelts; i++) {
                     msc_arg *arg = (msc_arg *)telts[i].val;
-                    if (strcmp(arg->origin, "BODY") != 0) continue;
+                    if (arg->origin != NULL &&
+                            strcmp(arg->origin, "BODY") != 0)
+                        continue;
 
                     if (last_offset == 0) { /* The first time we're here. */
                         if (arg->value_origin_offset > offset) {
