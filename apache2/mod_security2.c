@@ -37,6 +37,7 @@
 #include "msc_lua.h"
 #endif
 
+#include "msc_status_engine.h"
 
 /* ModSecurity structure */
 
@@ -59,6 +60,8 @@ char DSOLOCAL *guardianlog_condition = NULL;
 unsigned long int DSOLOCAL msc_pcre_match_limit = 0;
 
 unsigned long int DSOLOCAL msc_pcre_match_limit_recursion = 0;
+
+int DSOLOCAL status_engine_state = STATUS_ENGINE_DISABLED;
 
 unsigned long int DSOLOCAL conn_read_state_limit = 0;
 
@@ -722,6 +725,17 @@ static int hook_post_config(apr_pool_t *mp, apr_pool_t *mp_log, apr_pool_t *mp_t
             ap_log_error(APLOG_MARK, APLOG_NOTICE | APLOG_NOERRNO, 0, s,
                     "Original server signature: %s", real_server_signature);
         }
+
+#ifndef WIN32
+        if (status_engine_state != STATUS_ENGINE_DISABLED) {
+            msc_status_engine_call();
+        }
+        else {
+            ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, NULL,
+                    "Status engine is currently disabled, enable it by set " \
+                    "SecStatusEngine to On.");
+        }
+#endif
     }
 
     srand((unsigned int)(time(NULL) * getpid()));
