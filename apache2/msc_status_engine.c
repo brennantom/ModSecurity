@@ -34,7 +34,7 @@
 #endif
 #endif
 
-#ifdef __gnu_linux__
+#if (defined(__linux__) || defined(__gnu_linux__))
 #include <sys/utsname.h>
 #include <linux/if.h>
 #include <linux/sockios.h>
@@ -180,7 +180,7 @@ int DSOLOCAL msc_status_engine_mac_address (unsigned char *mac)
     freeifaddrs( ifaphead );
 #endif
 
-#if __gnu_linux__
+#if (defined(__linux__) || defined(__gnu_linux__))
     struct ifconf conf;
     int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP );
     struct ifreq* ifr;
